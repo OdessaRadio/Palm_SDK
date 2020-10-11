@@ -1,0 +1,98 @@
+Andrew Shinn (ashinn@ecimulti.org)
+12/25/2004
+
+From here on, on my offshoot, we'll start at 1.7x.xxxxxxxx. The format is version.subversion.date_of_build. A beta will be b1.7x.xxxxxxxx.
+
+Ver 1.70.12252004
+
+Notes: I actually compiled this back in August when I was working with Bob Bailey. I then sold my 1991 Eagle Talon and sat on it until now (I bought 
+another 1G DSM recently).
+
+Pref's menu:
+* Added baud selection up to 56700 bps. This is for faster Scanmaster polling usage.
+* Added MAP sensor selection. Currently it uses EGR-T input but will eventually also be used for datalogging usage with Scanmaster's 2 analog inputs... 
+  aka ANA1 or ANA2.
+* Added MAF Logging. You can now select 1600Hz or 3200Hz logging. It's my understanding that Keydiver is now making that 
+  standard in his commercially available ROMs. However, if you're still running a non-eprom ecu or the like keep it at 1600Hz.
+* Added Wideband scaling selection. Doesnt really do anything right now, but eventually using one of the analog inputs on the Scanmaster
+  you'll be able to log AFR within MMCd. This assumes you have a wideband with 5v analog output. The options there are just placeholders for now.
+* Added car type selection. You now can choose DSM or 3S. Currently the only thing that it changes is the timing advance display (3S's are -22
+  instead of the -12 of DSM's).
+* Less custom sensors. Expect those to shrink even further (perhaps 2) as I need more space on page 4. Don't really want to add a page 5 of sensors.
+
+Main logging menu:
+* Re-sorted sensors in a way that made more sense to ME and to fill out the pages better.
+* For right now, flags are missing. They'll be back soon.
+* Added ANA1 and ANA2 (Analog 1 and Analog 2 for Scanmaster).
+* Added VSS, which only works with Scanmaster. I've been advised by Bob Bailey in the past that.. its not always 100% accurate, so YMMV.
+* For right now, there only one O2 (sorry 3S owners). ASAP I'll be making the rear O2 sensor show up when you select 3S as your platform.
+* Removed EGR-T and changed it to MAP. Frankly, I don't know any Cali-Car owners who look at this or will cry that its gone.
+
+All in all, ... many things needing wrapped up.
+
+---
+
+Andrew Shinn (ashinn@ecimulti.org)
+12/25/2004
+
+Ver b1.70.12262004
+
+Perf's menu:
+* Removed custom sensors totally for the time being (perhaps forever?). I just really needed the form space, and I didn't want to add a page 5.
+  Most people don't use custom sensors, but I know some of you developer types do. My best suggestion is use an older official version of MMCd for
+  you testing needs. If this becomes a huge fiasco I'll do what I can, but right now its a bit of a coding nightmare.
+
+Main logging menu:
+* Re-added flags, someone complained they liked them. They're on page 4. 
+
+---
+
+Andrew Shinn (ashinn@ecimulti.org)
+1/5/2005
+
+Ver b1.70.01052005
+
+Same as above, except I fixed the changing page bug. Sorry it took so long to post!
+
+---
+
+Andrew Shinn (ashinn@ecimulti.org)
+1/11/2005
+
+Ver b1.70.01112005
+
+Perf's menu:
+* Updated the (i) Info for what all the sensors are a little bit.
+* Readded 2 custom sensors
+
+Main logging menu:
+- I'm working on adding all the flags that seem to be somewhat useful.
+* Added "Fuel Pump Relay" to FLG0. It will be denoted by an "F" switch lit up.
+* Added "FLG1" to page 4, right now I only have Canister Purge (P) and CE Light (C) in that.
+* Added "GREV" for stock/non expanded fuel & timing map cars. Stock g/Rev can only be logged from 0-2.06 (thats the actual limitation in the rom!) 
+  That being said it behooves you to read Kyle Tarry's writeup on adding extended map functionality to your ROM. Eventually I'll add an option for 
+  extended map users to also log g/Rev... thats not easy for me to test right now though, as my only eprom ecu died :( It's been sent in for 
+  repair though!!!
+* Readded 2 custom sensors (due to popular demand).
+
+---
+
+Andrew Shinn (ashinn@ecimulti.org)
+1/12/2005
+
+Ver b1.70.01122005
+
+Main logging menu:
+* Fixed g/rev
+* Added Lb/min it gets calculated automatically when GREV is selected like INJD (Injector Duty %)
+* Still currently only supports stock/non-extended maps for g/rev & lb/min .. its going to be some work to get that selection done. Will do ASAP.
+
+---
+
+Andrew Shinn (ashinn@ecimulti.org)
+1/12/2005
+
+Ver 1.71.01132005
+
+Main logging meni:
+* Fixed flag bugs (purge canister said it was on when it was off, so did AC clutch) That being said ... v1.71 is born.

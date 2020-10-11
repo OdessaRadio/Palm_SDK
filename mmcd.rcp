@@ -1,0 +1,482 @@
+/* 
+ *  $Id: mmcd.rcp,v 1.17 2003/07/03 10:30:34 dmitry Exp $
+ *
+ *  Copyright (c) 2003, Dmitry Yurtaev <dm1try@umail.ru>
+ *
+ *  This is free software; you can redistribute it and/or modify it under the
+ *  terms of the GNU General Public License as published by the Free Software
+ *  Foundation; either version 2, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ *  or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ *  for more details.
+ */
+
+#include "resource.h"
+
+version "1.71.01132005"
+
+iconfamilyex
+compress
+begin
+  bitmap "icons/mmcd1bpp.bmp" bpp 1 transparent 255 255 255
+  bitmap "icons/mmcd4bpp.bmp" bpp 4 transparent 255 255 255
+  bitmap "icons/mmcd8bpp.bmp" bpp 8 transparent 255 255 255
+  bitmap "icons/mmcd8bpp-h.bmp" bpp 8 transparent 255 255 255 density 2
+end
+
+smalliconfamilyex
+compress
+begin
+  bitmap "icons/smmcd1bpp.bmp" bpp 1 transparent 255 255 255
+  bitmap "icons/smmcd4bpp.bmp" bpp 4 transparent 255 255 255
+  bitmap "icons/smmcd8bpp.bmp" bpp 8 transparent 255 255 255
+  bitmap "icons/smmcd8bpp-h.bmp" bpp 8 transparent 255 255 255 density 2 
+end
+
+bitmapfamilyex id 555
+compress
+begin
+  bitmap "icons/mmcd1bpp.bmp" bpp 1 transparent 255 255 255
+  bitmap "icons/mmcd4bpp.bmp" bpp 4 transparent 255 255 255
+  bitmap "icons/mmcd8bpp.bmp" bpp 8 transparent 255 255 255
+  bitmap "icons/mmcd8bpp-h.bmp" bpp 8 transparent 255 255 255 density 2 
+end
+
+font id bigFontId fontid 128 "font.txt"
+
+
+/*
+ *  main form
+ */
+
+form id mainFormId at (0 0 160 160)
+menuid mainFormId
+begin
+  title "MMCd"
+
+  scrollbar mainScrollbarId at (right@159 16 7 130) value 0 min 0 max 0 pagesize 11
+  
+  button "New" id newButtonId at (1 bottom@159 40 auto)
+/*
+  button "D" debugButtonId at (right@159 bottom@159 40 auto)
+  button "Test" testButtonId at (right@prevleft-4 bottom@159 40 auto)
+*/
+end
+
+
+menu id mainFormId
+begin
+  pulldown "Mode"
+  begin
+    menuitem "Test..." id testMenuId "T"
+    menuitem "Debug..." id debugMenuId "D"
+  end
+  pulldown "Options"
+  begin
+    menuitem "Alarms..." id alarmsMenuId "A"
+    menuitem "Preferences..." id prefsMenuId "R"
+    menuitem "About MMCd" id aboutMenuId
+  end
+end
+
+/*
+ *  edit form
+ */
+
+form id editFormId at (0 0 160 160)
+menuid editFormId
+begin
+  title "MMCd"
+
+  pushbutton "1" bank1ButtonId at (98 2 9 9) group bankGroupId
+  pushbutton "2" bank2ButtonId at (108 2 9 9) group bankGroupId
+  pushbutton "3" bank3ButtonId at (118 2 9 9) group bankGroupId
+  pushbutton "4" bank4ButtonId at (128 2 9 9) group bankGroupId
+  pushbutton "H" hideUnusedButtonId at (150 2 9 9)
+
+  label "          " id timeLabelId at (0 58) nonusable
+
+/* New Peak Checkbox option
+  checkbox "Graph" graphCheckId at (0 58 auto 11) nonusable
+  checkbox "Peak" peakCheckId at (40 58 auto 11) nonusable
+  checkbox "Log" logCheckId at (80 58 auto 11) nonusable
+  checkbox "Pause" pauseCheckId at (right@159 58 auto 11) nonusable
+*/
+
+  checkbox "Graph" graphCheckId at (0 58 auto 11) nonusable
+  checkbox "Log" logCheckId at (63 58 auto 11) nonusable
+  checkbox "Pause" pauseCheckId at (right@159 58 auto 11) nonusable
+
+  scrollbar id scrollBarId at (0 136 160 7)
+
+  pushbutton "Monitor" monitorButtonId at (right@159 bottom@159 auto auto) group modeGroupId
+  pushbutton "Review" reviewButtonId at (right@prevleft-1 bottom@159 auto auto) group modeGroupId
+
+  button "Done" doneButtonId at (1 bottom@159 40 auto)
+
+	BUTTON "Test button" AUTOID AT (-1 70 AUTO AUTO) DISABLED    
+end
+
+
+menu id editFormId
+begin
+  pulldown "Log"
+  begin
+    menuitem "Rename/Upload Log..." id renameLogMenuId "N"
+    menuitem "Delete Log..." id deleteLogMenuId "D"
+    menuitem "Truncate Log..." id truncateLogMenuId "T"
+  end
+  pulldown "Options"
+  begin
+    menuitem "Alarms..." id alarmsMenuId "A"
+    menuitem "Preferences..." id prefsMenuId "R"
+    menuitem "About MMCd" id aboutMenuId
+  end
+end
+
+
+/*
+ *  test form
+ */
+
+form id testFormId at (0 0 160 160)
+menuid testFormId
+begin
+  title "MMCd - Vehicle Test Menu"
+
+  label "DTCs"      id faultsLabelId at (right@38 17)
+  button "Read"     id readFaultsButtonId at (42 prevtop 57 auto)
+  button "Erase"    id eraseFaultsButtonId at (prevright+3 prevtop 57 auto)
+
+  label "Active"    id currentFaultsLabelId at (right@38 32)
+  label "Stored"    id storedFaultsLabelId at (right@38 53)
+  label "Meaning"   id meaningLabelId at (right@38 74)
+  label "                                 " id descrLabelId at (42 74)
+  
+  label "Fuel"      id fuelLabelId at (right@38 115)
+  button "Pump"     id pumpButtonId     at (42 prevtop 37 auto)
+  button "Pres-re"  id pressureButtonId at (prevright+3 prevtop 37 auto)
+  button "MVIC"     id mvicButtonId at (prevright+3 prevtop 37 auto)
+  
+  label "Solenoids" id solLabelId at (right@39 100)
+  button "Purge"    id purgeButtonId    at (42 prevtop 37 auto)
+  button "EGR"      id egrButtonId    at (prevright+3 prevtop 37 auto)
+  button "Boost"    id boostButtonId      at (prevright+3 prevtop 37 auto)
+  
+  label "Injectors" id injLabelId at (right@39 130)
+  button "1" inj1ButtonId at (42 prevtop 17 12)
+  button "2" inj2ButtonId at (prevright+3 prevtop 17 12)
+  button "3" inj3ButtonId at (prevright+3 prevtop 17 12)
+  button "4" inj4ButtonId at (prevright+3 prevtop 17 12)
+  button "5" inj5ButtonId at (prevright+3 prevtop 17 12)
+  button "6" inj6ButtonId at (prevright+3 prevtop 17 12)
+
+  button "Done" doneButtonId at (1 bottom@159 40 auto)
+end
+
+menu id testFormId
+begin
+  pulldown "Options"
+  begin
+    menuitem "Alarms..." id alarmsMenuId "A"
+    menuitem "Preferences..." id prefsMenuId "R"
+    menuitem "About MMCd" id aboutMenuId
+  end
+end
+
+/* 
+ *  debug form
+ */
+
+form id debugFormId at (0 0 160 160)
+menuid debugFormId
+begin
+  title "MMCd - Debug"
+
+  pushbutton "1" bank1ButtonId at (98 2 9 9) group bankGroupId
+  pushbutton "2" bank2ButtonId at (108 2 9 9) group bankGroupId
+  pushbutton "3" bank3ButtonId at (118 2 9 9) group bankGroupId
+  pushbutton "4" bank4ButtonId at (128 2 9 9) group bankGroupId
+
+  field id debugFieldId at (4 100 145 44) underlined multiplelines maxchars 1024 hasscrollbar
+  scrollbar id scrollBarId at (right@159 prevtop 7 prevheight) min 0 max 0 pagesize 4
+
+  button "Done" doneButtonId at (1 bottom@159 40 auto)
+end
+
+menu id debugFormId
+begin
+  pulldown "Options"
+  begin
+    menuitem "Alarms..." id alarmsMenuId "A"
+    menuitem "Preferences..." id prefsMenuId "R"
+    menuitem "About MMCd" id aboutMenuId
+  end
+end
+
+/* 
+ *  alerts
+ */
+
+alert id versionAlertId
+  error
+begin
+  title "Error"
+  message "This software requires PalmOS 3.5 or newer"
+  buttons "Exit"
+end
+
+alert id newLogAlertId
+  defaultbutton 1
+  confirmation
+begin
+  title "New Log"
+  message "Create new Log?"
+  buttons "Yes" "No"
+end
+
+form id renameLogFormId at (2 bottom@158 156 90)
+frame modal
+defaultbtnid cancelButtonId
+begin
+  title "Rename Log"
+  label "New log name" autoid at (5 18) font 1
+  field id newNameFieldId at (5 35 145 auto) underlined autoshift maxchars 31
+  checkbox "Upload Log via HotSync" id backupLogCheckId at (center 53 auto auto) font 1
+  button "Ok" id okButtonId at (5 bottom@85 36 auto)
+  button "Cancel" id cancelButtonId at (prevright+6 prevtop 36 auto)
+end
+
+alert id deleteLogAlertId
+  defaultbutton 1
+  warning
+begin
+  title "Delete Log"
+  message "Delete current log?"
+  buttons "Yes" "No"
+end
+
+alert id truncateLogAlertId
+  defaultbutton 1
+  warning
+begin
+  title "Truncate Log"
+  message "Erase current log data?"
+  buttons "Yes" "No"
+end
+
+alert id eraseFaultsAlertId
+  defaultbutton 1
+  confirmation
+begin
+  title "Erase DTCs"
+  message "Erase memorized DTCs?"
+  buttons "Yes" "No"
+end
+
+/*
+ *  preferences
+ */
+
+form id prefsDialogId at (2 bottom@158 156 146)
+frame modal
+helpid prefsDialogId
+begin
+  title "Preferences"
+
+  label "Custom sensors" autoid at (center 14) font 1
+
+  checkbox "" id customSensorId     at (3 prevbottom+2 auto auto)
+  field id customSensorId    +1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2
+  field id customSensorId    +2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4
+
+  checkbox "" id customSensorId+3   at (83 prevtop auto auto) 
+  field id customSensorId+  3+1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2
+  field id customSensorId+  3+2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4
+
+  checkbox "" id customSensorId+6   at (3 prevbottom auto auto) NONUSABLE
+  field id customSensorId+  6+1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2 NONUSABLE
+  field id customSensorId+  6+2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4 NONUSABLE
+
+  checkbox "" id customSensorId+9   at (83 prevtop auto auto) NONUSABLE
+  field id customSensorId+  9+1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2 NONUSABLE
+  field id customSensorId+  9+2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4 NONUSABLE
+
+  checkbox "" id customSensorId+12  at (3 prevbottom auto auto) NONUSABLE
+  field id customSensorId+ 12+1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2 NONUSABLE
+  field id customSensorId+ 12+2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4 NONUSABLE
+
+  checkbox "" id customSensorId+15  at (83 prevtop auto auto) NONUSABLE
+  field id customSensorId+ 15+1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2 NONUSABLE
+  field id customSensorId+ 15+2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4 NONUSABLE
+
+  checkbox "" id customSensorId+18  at (3 prevbottom auto auto) NONUSABLE
+  field id customSensorId+ 18+1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2 NONUSABLE
+  field id customSensorId+ 18+2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4 NONUSABLE
+
+  checkbox "" id customSensorId+21  at (83 prevtop auto auto) NONUSABLE
+  field id customSensorId+ 21+1 at (prevright-2 prevtop 14 auto) editable underlined singleline maxchars 2 NONUSABLE
+  field id customSensorId+ 21+2 at (prevright+5 prevtop 32 auto) editable underlined singleline maxchars 4 NONUSABLE
+
+  label "Speed:" autoid at (5 45) font 1
+  popuptrigger "1920 bps" id speedTriggerId at (prevright+3 prevtop auto auto) leftanchor
+  list "1920 bps" "1953 bps" "8192 bps" "9600 bps" "19200 bps" "38400 bps" "56700 bps" id speedListId at (prevleft+13 prevtop auto 79) visibleitems 7 nonusable
+  popuplist id speedTriggerId speedListId
+
+  label "Alarms:" autoid at (prevright prevtop) font 1
+  checkbox "" id alarmsCheckId at (prevright+4 prevtop auto auto)
+
+  label "Units:" autoid at (5 prevtop+13) font 1
+  popuptrigger "Metric" id unitTriggerId at (prevright+3 prevtop auto auto) leftanchor
+  list "Metric" "English" "Numeric" id unitListId at (prevleft+13 prevtop auto 35) 
+  visibleitems 3 nonusable
+  popuplist id unitTriggerId unitListId
+
+  label "WB:" autoid at (prevright prevtop) font 1
+  popuptrigger "LM-1" id wb02TriggerId at (prevright+3 prevtop auto auto) leftanchor
+  list "LM-1" "FJO" "TE15" "TE20" id wb02ListId at (prevleft+13 prevtop auto 46) visibleitems 4 nonusable
+  popuplist id wb02TriggerId wb02ListId
+ 
+  label "MAP Sensor:" autoid at (5 prevtop+13) font 1
+  popuptrigger "3.0 BAR" id egtinputTriggerId at (prevright+3 prevtop auto auto) leftanchor
+  list "3.0 BAR" "2.5 BAR" "2.0 BAR" "EGT" id egtinputListId at (prevleft+13 prevtop auto 46) visibleitems 4 nonusable
+  popuplist id egtinputTriggerId egtinputListId
+
+  label "MAF Logging:" autoid at (5 prevtop+13) font 1
+  popuptrigger "1600Hz" id mafTriggerId at (prevright+3 prevtop auto auto) leftanchor
+  list "1600Hz" "3200Hz" id mafListId at (prevleft+13 prevtop auto 24) visibleitems 2 nonusable
+  popuplist id mafTriggerId mafListId
+
+  label "Car:" autoid at (5 prevtop+13) font 1
+  popuptrigger "DSM" id carTriggerId at (prevright+3 prevtop auto auto) leftanchor
+  list "DSM" "3S" id carListId at (prevleft+13 prevtop auto 24) visibleitems 2 nonusable
+  popuplist id carTriggerId carListId
+
+  button "OK" id okButtonId at (5 bottom@141 36 auto)
+  button "Cancel" id cancelButtonId at (prevright+7 prevtop 36 auto)
+  button "Default" id defaultButtonId at (prevright+7 prevtop 36 auto)
+
+/*  checkbox "Compatible graphics" id compatibleGraphicsId at (center prevtop+13 auto auto) font 1 */
+
+end
+
+string id prefsDialogId
+	"\225 FLG0	- (F) Fuel Pump Relay, (A) AC Clutch\n" \
+	"\225 FLG1	- (P) Canister Purge, (C) CE Light\n" \
+	"\225 FLG2	- (T) TDC, (P) P/S Switch, (A) AC Switch, (N) Neutral (A/T), (I) Idle Switch\n" \
+	"\225 TIMA	- Timing advance\n" \
+	"\225 COOL	- Coolant temp\n" \
+	"\225 FTRL	- Fuel trim low\n" \
+	"\225 FTRM	- Fuel trim middle\n" \
+	"\225 FTRH	- Fuel trim high\n" \
+	"\225 FTO2	- O2 feedback trim\n" \
+	"\225 MAP	- Boost / vacuum pressure\n" \
+	"\225 O2	- Main / Front O2 sensor\n" \
+	"\225 O2-R	- Rear O2 sensor\n" \
+	"\225 BATT	- Battery voltage\n" \
+	"\225 BARO	- Barometer\n" \
+	"\255 GREV	- Airflow expressed per revolution\n" \
+	"\255 LBMN	- Airflow expressed in Lb/min\n" \
+	"\225 ISC	- ISC position\n" \
+	"\225 TPS	- Throttle position\n" \
+	"\225 MAFS	- Airflow in Hz\n" \
+	"\225 ACLE	- Accel enrichment\n" \
+	"\225 RPM	- Engine speed\n" \
+	"\225 KNCK	- Knock sum\n" \
+	"\225 INJP	- Injector pulse\n" \
+	"\225 INJD	- Injector duty\n" \
+	"\225 AIRT	- Air temp\n" \
+	"\225 VSS	- Vehicle speed\n" \
+	"\255 ANA1	- SM Analog Input #1\n" \
+	"\255 ANA2	- SM Analog Input #2\n"
+
+stringtable id faultStringsId ""
+	"(11) Oxygen sensor"
+	"(12) MAFS"
+	"(13) Air temperature sensor"
+	"(14) TPS"
+	"(15) ISC postion sensor"
+	"(21) Coolant temp sensor"
+	"(22) Crank angle sensor"
+	"(23) TDC sensor"
+	"(24) Vehicle speed sensor"
+	"(25) Barometric sensor"
+	"(31) Knock sensor"
+	"(41) Injector circuit"
+	"(42) Fuel pump relay"
+	"(43) EGR"
+	"(44) Ignition coil"
+	"(36) Ignition circuit"
+	"None"
+	"Serial comm error"
+	"ECU comm error"
+
+/*
+ *  alarms form
+ */
+
+bitmap id threshBackBitmapId "icons/slider-back.bmp" 
+
+bitmapfamilyex id threshThumbBitmapId
+begin
+  bitmap "icons/slider-thumb.bmp" bpp 1 
+  bitmap "icons/slider-thumb-h.bmp" bpp 1 density 2
+end
+
+/* bitmap id threshThumbBitmapId "icons/slider-thumb.bmp" */
+
+form id alarmsFormId at (2 bottom@158 156 97)
+frame modal
+/*helpid alarmsDialogId*/
+begin
+  title "Alarms"
+
+  label "Sensor:" autoid at (right@59 16) font 1
+  popuptrigger "" id alarmTriggerId at (prevright+5 prevtop auto auto) leftanchor font 1
+  list "" id alarmListId at (prevleft+13 prevtop 50 79) visibleitems 7 nonusable
+  popuplist id alarmTriggerId alarmListId
+
+  label "Sound:" autoid at (right@59 prevtop+16) font 1
+  pushbutton "Off" sound0ButtonId at (prevright+5 prevtop 34 11) group soundGroupId
+  pushbutton "1" sound1ButtonId at (prevright+1 prevtop 11 11) group soundGroupId
+  pushbutton "2" sound2ButtonId at (prevright+1 prevtop 11 11) group soundGroupId
+  pushbutton "3" sound3ButtonId at (prevright+1 prevtop 11 11) group soundGroupId
+  pushbutton "4" sound4ButtonId at (prevright+1 prevtop 11 11) group soundGroupId
+
+  slider id threshSliderId at (60 prevtop+15 30 13) feedback min 0 max 255 pagesize 1 backgroundid threshBackBitmapId thumbid threshThumbBitmapId
+
+  label "Threshold:" autoid at (right@59 prevtop+15) font 1
+  selectortrigger ">" id threshSignButtonId at (prevright+5 prevtop 11 11)
+  label "         " id threshFieldId at (prevright+5 prevtop) font 1
+
+  button "Close" id okButtonId at (center@78 prevtop+18 auto auto)
+end
+
+/*
+ *  about
+ */
+
+form id aboutDialogId at (2 2 156 156)
+frame modal
+begin
+  title "About MMCd"
+
+  formbitmap at (4 21) bitmap 555
+
+  label "MMCd 'Offshoot'" autoid at (41 21) font 1
+  label "1.71.01132005" autoid at (prevleft prevtop+11) font 1
+
+  label "Original Work: Dmitry Yurtaev" autoid at (5 52)
+  label "Offshoot Version: Andrew Shinn" autoid at (prevleft prevtop+11)
+  label "e-Mail: ashinn@ecimulti.org" autoid at (prevleft prevtop+11)
+  label "http://www.ecimulti.org/mmcd" autoid at (prevleft prevtop+11)
+
+  label "This is free software, and may be" autoid at (5 99)
+  label "redistributed under the GNU GPL." autoid at (prevleft+1 prevtop+11)
+  label "It has absolutely no warranty." autoid at (prevleft prevtop+11)
+
+
+  button "OK" id okButtonId at (center 139 36 auto)
+end
